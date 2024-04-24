@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #b2d9ff;
+      border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b2d9ff;
+    }
+
+    body {
+      background-color: #86C0FF;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+
+    #container {
+      position: absolute;
+      bottom: 50px;
+      /* Adjust as needed */
+      left: 50%;
+      /* Center horizontally */
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #promptInput {
+      width: 300px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+      /* Adjust spacing between input and button */
+    }
+
+    #generateButton {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #storyOutput {
+      width: 40%;
+      height: 40%;
+      overflow-y: scroll;
+      /* Adjust width as needed */
+      text-align: center;
+      margin-top: 20px;
+      /* Add spacing between button and output */
+      border-radius: 10px;
+      /* Add border radius */
+      padding: 20px;
+      /* Add padding */
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+</style>
+<script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+<script type="module">
+  import {GoogleGenerativeAI} from "@google/generative-ai";
+
+  // Fetch your API_KEY
+  const API_KEY = "AIzaSyCjvTioKte17MMH_OyHlG_BVof7J7Dw01E";
+
+  // Access your API key (see "Set up your API key" above)
+  const genAI = new GoogleGenerativeAI(API_KEY);
+
+  async function generateStory() {
+    // Get the prompt from the input field
+    const promptInput = document.getElementById('promptInput');
+    const prompt = promptInput.value;
+
+    // For text-only input, use the gemini-pro model
+    const model = genAI.getGenerativeModel({model: "gemini-pro"});
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+
+    // Display the generated story
+    const storyOutput = document.getElementById('storyOutput');
+    storyOutput.innerText = text;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const generateButton = document.getElementById('generateButton');
+    generateButton.addEventListener('click', generateStory);
+  });
+</script>
+</head>
+
+<body>
+  <div id="container">
+    <input type="text" id="promptInput" placeholder="Enter your prompt here...">
+    <button id="generateButton">Generate</button>
+  </div>
+  <div id="storyOutput"></div>
+</body>
+
+</html>
